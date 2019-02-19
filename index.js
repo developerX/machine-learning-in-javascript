@@ -1,43 +1,13 @@
 //Dependent Library lodash
 const _ = require('lodash');
 //Import dummy data has over 5500 records of balls being dropped
-const outputs = require('./data/oneByOne.json');
+const dummyData = require('./data/oneByOne.json');
 // The amount of neighbors to find
 const k = 10;
-//The K-nearest Neighbor Algorithm in practice
-function knn(data, point, k) {
-  return _.chain(data)
-    // loop through every data point and do a calculation
-    .map(row => {
-      return [
-        distance(
-          _.initial(row),
-          point
-        ),
-        _.last(row)
-      ]
-    })
-    // sort by the distance
-    .sortBy(row => row[0])
-    // return the data by the amount of K
-    .slice(0, k)
-    // Organize by most common outcome
-    .countBy(row => row[1])
-    // Turn them back into an array
-    .toPairs()
-    // Sort them in ascending order
-    .sortBy(row => row[1])
-    // return the last array (most common output)
-    .last()
-    // return the value of most likely return
-    .first()
-    //convert back into a number
-    .parseInt()
-    // return the chain
-    .value()
-}
+//Determines how big of a test set size
+const testSetSize = 200;
 
-// Calculates the absolute distance between 2 points
+// Calculate the distance between two points
 function distance(pointA, pointB) {
   // multiple features
   return _.chain(pointA)
@@ -45,9 +15,6 @@ function distance(pointA, pointB) {
     .map(([a, b]) => (a - b) ** 2)
     .sum()
     .value() ** 0.5;
-
-  // single feature based off point
-  // return Math.abs(pointA - pointB);
 }
 
 //Splits data into a test set and a training set
@@ -86,12 +53,42 @@ function normalizeData(data, featureCount) {
   return clonedData;
 }
 
-//Determines how big of a test set size
-const testSetSize = 200;
+//The K-nearest Neighbor Algorithm in practice
+function knn(data, point, k) {
+  return _.chain(data)
+    // loop through every data point and do a calculation
+    .map(row => {
+      return [
+        distance(
+          _.initial(row),
+          point
+        ),
+        _.last(row)
+      ]
+    })
+    // sort by the distance
+    .sortBy(row => row[0])
+    // return the data by the amount of K
+    .slice(0, k)
+    // Organize by most common outcome
+    .countBy(row => row[1])
+    // Turn them back into an array
+    .toPairs()
+    // Sort them in ascending order
+    .sortBy(row => row[1])
+    // return the last array (most common output)
+    .last()
+    // return the value of most likely return
+    .first()
+    //convert back into a number
+    .parseInt()
+    // return the chain
+    .value()
+}
 
 // Determines a range for k
 _.range(0, 3).forEach(feature => {
-  const data = _.map(outputs, row => [row[feature], _.last(row)])
+  const data = _.map(dummyData, row => [row[feature], _.last(row)])
   // Array destructuring into a test set and a training set
   const [testSet, trainingSet] = splitDataset(normalizeData(data, 1), testSetSize);
   // runs KNN on each range value and tests for accuracy

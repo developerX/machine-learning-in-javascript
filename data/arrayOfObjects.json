@@ -1,0 +1,25 @@
+[{
+    "dropPosition": 336,
+    "ballBounciness": 0.538080498808546,
+    "size": 16,
+    "bucket": 8
+  },
+  {
+    "dropPosition": 626,
+    "ballBounciness": 0.5270439632853204,
+    "size": 16,
+    "bucket": 5
+  },
+  {
+    "dropPosition": 556,
+    "ballBounciness": 0.5274413852438387,
+    "size": 16,
+    "bucket": 4
+  },
+  {
+    "dropPosition": 696,
+    "ballBounciness": 0.5196734902311055,
+    "size": 16,
+    "bucket": 8
+  }
+]
